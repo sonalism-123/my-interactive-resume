@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sonali Muddebihal | Interactive Resume</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Modern Professional (Soft Blues, Grays, and a touch of Teal/Green) -->
+    <!-- Application Structure Plan: A single-page application with a fixed navigation bar for easy access to key sections: Summary, Skills, Experience, and Education. This structure prioritizes a non-linear exploration, allowing recruiters to jump directly to the most relevant information. It starts with a prominent photo and personal details, followed by high-impact "Key Achievement" cards, an interactive skills visualization, and a clickable timeline for experience. This dashboard-like approach is designed to be more engaging and scannable than a traditional resume, effectively telling the story of a transition into data analytics. -->
+    <!-- Visualization & Content Choices: Summary -> Personal Photo (HTML img) and Key Achievement Cards (HTML/Tailwind) to immediately highlight quantifiable results. Skills -> Horizontal Bar Chart (Chart.js) to visually group and present technical proficiencies. Experience -> Interactive Vertical Timeline (HTML/JS) to make career history digestible and focus on data-related tasks. Education/Languages -> Clean, styled lists (HTML/Tailwind) for clarity. These choices are made to create a narrative flow that emphasizes data skills and impact. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8; /* Light blue-gray background */
+            color: #2c3e50; /* Darker text for contrast */
+        }
+        .font-heading {
+            font-family: 'Montserrat', sans-serif; /* A modern, clean heading font */
+        }
+        .nav-link {
+            transition: color 0.3s, border-color 0.3s;
+        }
+        .nav-link.active, .nav-link:hover {
+            color: #3498db; /* Brighter blue for active/hover */
+            border-bottom-color: #3498db;
+        }
+        .kpi-card {
+            background-color: #ffffff;
+            border-left: 5px solid #2ecc71; /* Green accent for KPIs */
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .kpi-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.1);
+        }
+        .timeline-item-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out, padding 0.5s ease-in-out;
+        }
+        .timeline-item-content.open {
+            max-height: 500px; /* Adjust as needed for content */
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+        }
+        .timeline-dot {
+            transition: background-color 0.3s;
+        }
+        .timeline-item.active .timeline-dot {
+            background-color: #3498db; /* Blue for active timeline dot */
+        }
+        .chart-container {
+            position: relative; 
+            width: 100%; 
+            max-width: 900px; 
+            margin-left: auto; 
+            margin-right: auto; 
+            height: 350px; 
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container { 
+                height: 400px; 
+            } 
+        }
+        .profile-photo {
+            border: 4px solid #3498db; /* Blue border around photo */
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header & Navigation -->
+    <header id="header" class="bg-white/90 backdrop-blur-lg sticky top-0 z-50 shadow-md">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="text-2xl font-heading font-bold text-[#2c3e50] tracking-tight">Sonali Muddebihal</div>
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="#summary" class="nav-link text-gray-700 border-b-2 border-transparent pb-1 hover:text-[#3498db]">Summary</a>
+                <a href="#skills" class="nav-link text-gray-700 border-b-2 border-transparent pb-1 hover:text-[#3498db]">Skills</a>
+                <a href="#experience" class="nav-link text-gray-700 border-b-2 border-transparent pb-1 hover:text-[#3498db]">Experience</a>
+                <a href="#education" class="nav-link text-gray-700 border-b-2 border-transparent pb-1 hover:text-[#3498db]">Education</a>
+            </div>
+            <a href="mailto:Smuddebihal000@gmail.com" class="hidden md:block bg-[#3498db] text-white px-5 py-2 rounded-full hover:bg-[#2980b9] transition-colors shadow-lg">Contact Me</a>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-6 py-12">
+
+        <!-- Summary & Key Achievements -->
+        <section id="summary" class="mb-24 text-center">
+            <div class="flex flex-col items-center mb-8">
+                <img src="Sonali1.jpg" alt="Sonali Muddebihal" class="profile-photo w-36 h-36 rounded-full object-cover mb-6">
+                <h1 class="font-heading text-5xl md:text-6xl font-bold text-[#2c3e50] mb-4">Sonali Muddebihal</h1>
+                <p class="text-xl md:text-2xl font-semibold text-gray-700 mb-6">Aspiring Data Analyst | Former Project Engineer @ Wipro | Skilled in SQL, Excel, Python, Power BI</p>
+                <div class="flex flex-wrap justify-center gap-4 text-gray-600 text-sm md:text-base">
+                    <p class="flex items-center gap-1">
+                    <p class="flex items-center gap-1">📧 <a href="mailto:Smuddebihal000@gmail.com" class="hover:underline text-[#3498db]">Smuddebihal000@gmail.com</a></p>
+                    <p class="flex items-center gap-1">📞 +4917675212180</p>
+                    <p class="flex items-center gap-1">🔗 <a href="https://www.linkedin.com/in/sonali-muddebihal-1b27481a3" target="_blank" class="hover:underline text-[#3498db]">LinkedIn Profile</a></p>
+                    <p class="flex items-center gap-1">📍 Baererstrasse 84, 21073 Hamburg, Hamburg, Germany</p>
+                </div>
+            </div>
+
+            <p class="max-w-3xl mx-auto text-lg text-gray-600 mb-12">
+                Detail-oriented IT professional with 2.5 years of experience in application development and support at Wipro. Proficient in SQL, Excel, and enterprise reporting tools with hands-on experience in Power BI, Tableau, and Azure Data Factory (ADF). Currently seeking opportunities as an **Application Support Engineer** or an **entry-level Data Analyst**, supported by ongoing Data Science & AI coursework. Adept at creating dashboards, optimizing data pipelines, and delivering actionable insights for business stakeholders.
+            </p>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 text-left">
+                <div class="kpi-card p-6 rounded-lg shadow-md">
+                    <p class="font-heading text-4xl font-bold text-[#2ecc71] mb-2">15%</p>
+                    <p class="text-gray-700 font-medium">Reduction in SLA Breaches by optimizing ticket resolution during critical payroll cycles.</p>
+                </div>
+                <div class="kpi-card p-6 rounded-lg shadow-md">
+                    <p class="font-heading text-4xl font-bold text-[#2ecc71] mb-2">20%</p>
+                    <p class="text-gray-700 font-medium">Reduction in Manual Reporting Time by building automated dashboards in Power BI and SSRS.</p>
+                </div>
+                <div class="kpi-card p-6 rounded-lg shadow-md">
+                    <p class="font-heading text-4xl font-bold text-[#2ecc71] mb-2">25%</p>
+                    <p class="text-gray-700 font-medium">Improvement in Lead Identification Accuracy by developing an AI-based module.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Technical Skills -->
+        <section id="skills" class="mb-24">
+            <h2 class="font-heading text-4xl font-bold text-center mb-8 text-[#2c3e50]">Technical Skillset</h2>
+             <p class="text-center max-w-3xl mx-auto text-lg text-gray-600 mb-12">
+                Here, my technical abilities are visualized for clarity. Instead of a simple list, this chart groups my skills into key areas relevant to data analytics, from programming languages to cloud tools. Hover over the bars to see the specific technologies I've mastered in each category.
+            </p>
+            <div class="bg-white p-6 rounded-lg shadow-lg">
+                <div class="chart-container">
+                    <canvas id="skillsChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Experience -->
+        <section id="experience" class="mb-24">
+            <h2 class="font-heading text-4xl font-bold text-center mb-8 text-[#2c3e50]">Career Journey</h2>
+            <p class="text-center max-w-3xl mx-auto text-lg text-gray-600 mb-12">
+                My professional history is presented as an interactive timeline. This format allows you to explore my roles at your own pace. Click on any job title to expand and view my key responsibilities and accomplishments, with a focus on data-related achievements that bridge my support background with my analytics future.
+            </p>
+            <div class="relative w-full max-w-3xl mx-auto py-8">
+                <!-- Vertical Line -->
+                <div class="absolute left-4 md:left-1/2 top-0 h-full w-0.5 bg-gray-300 transform -translate-x-1/2"></div>
+                
+                <!-- Timeline Item 1 -->
+                <div class="timeline-item relative pl-12 md:pl-0 pb-16 cursor-pointer group" data-timeline-index="0">
+                    <div class="flex flex-col md:flex-row items-start md:items-center">
+                        <div class="md:w-1/2 md:pr-12 text-right">
+                            <p class="text-sm text-gray-500 mb-1 md:mb-0">Dec 2021 – May 2024</p>
+                            <h3 class="text-xl font-bold text-[#2c3e50] mb-1">Project Engineer / Application Support</h3>
+                            <p class="font-medium text-gray-700">Wipro Technologies – Bengaluru, India</p>
+                        </div>
+                        <div class="timeline-dot absolute left-4 md:left-1/2 top-1 md:top-1/2 w-4 h-4 rounded-full bg-gray-400 group-hover:bg-[#3498db] transform -translate-x-1/2 -translate-y-1/2 transition-colors"></div>
+                        <div class="md:w-1/2 md:pl-12 text-left">
+                            <div class="timeline-item-content bg-white p-5 rounded-lg shadow-md mt-4 md:mt-0">
+                                <ul class="list-disc list-inside text-gray-700 space-y-2">
+                                    <li>Provided application and technical support for the Timemate platform, resolving client issues related to attendance, payroll, and leave management.</li>
+                                    <li>Worked extensively with a service tool, managing and closing high volumes of support tickets within SLA, achieving **98% SLA adherence for 500+ tickets/month**.</li>
+                                    <li>Played a key role during payroll freezing cycles, ensuring timely ticket resolution and smooth business continuity, helping reduce SLA breaches, **reducing breaches by 15%**.</li>
+                                    <li>Built automated reports and dashboards using SSRS, Power BI, and Excel to track performance and improve visibility, **reducing manual reporting time by 20%** and providing actionable insights.</li>
+                                    <li>Collaborated with QA and development teams to troubleshoot, document, and deliver fixes and enhancements in Agile sprints.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Timeline Item 2 -->
+                <div class="timeline-item relative pl-12 md:pl-0 pb-16 cursor-pointer group" data-timeline-index="1">
+                    <div class="flex flex-col md:flex-row items-start md:items-center">
+                        <div class="md:w-1/2 md:pr-12 text-right">
+                            <p class="text-sm text-gray-500 mb-1 md:mb-0">June 2020 – Aug 2020</p>
+                            <h3 class="text-xl font-bold text-[#2c3e50] mb-1">Junior Data Scientist (Internship)</h3>
+                            <p class="font-medium text-gray-700">Data As Services</p>
+                        </div>
+                        <div class="timeline-dot absolute left-4 md:left-1/2 top-1 md:top-1/2 w-4 h-4 rounded-full bg-gray-400 group-hover:bg-[#3498db] transform -translate-x-1/2 -translate-y-1/2 transition-colors"></div>
+                        <div class="md:w-1/2 md:pl-12 text-left">
+                            <div class="timeline-item-content bg-white p-5 rounded-lg shadow-md mt-4 md:mt-0">
+                                <ul class="list-disc list-inside text-gray-700 space-y-2">
+                                    <li>Worked on a project titled 'Data Science and Its Importance for Emerging Startups'.</li>
+                                    <li>Developed AI-based modules to identify and target potential customers, **improving lead identification accuracy by 25%**.</li>
+                                    <li>Created visual reports and presented analytical findings using Tableau and Excel, **enabling data-driven decisions for 3 key stakeholders**.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Education & Certifications -->
+        <section id="education" class="mb-16">
+            <h2 class="font-heading text-4xl font-bold text-center mb-12 text-[#2c3e50]">Education & Credentials</h2>
+            <div class="max-w-4xl mx-auto grid md:grid-cols-2 gap-10">
+                <div>
+                    <h3 class="font-heading text-2xl font-bold mb-4 text-[#2c3e50]">Formal Education</h3>
+                    <div class="space-y-6">
+                        <div class="bg-white p-6 rounded-lg shadow">
+                            <p class="font-semibold text-lg text-[#2c3e50]">Bachelor of Engineering, Computer Science</p>
+                            <p class="text-gray-700">BLDEA’s College of Engineering & Technology</p>
+                            <p class="text-sm text-gray-500">2017 – 2021 | 8.45 CGPA</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow">
+                            <p class="font-semibold text-lg text-[#2c3e50]">Pre-University Course (PCMB)</p>
+                            <p class="text-gray-700">Chetana PU Science College</p>
+                            <p class="text-sm text-gray-500">2016 – 2017 | 94.23%</p>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="font-heading text-2xl font-bold mb-4 text-[#2c3e50]">Certifications & Languages</h3>
+                    <div class="space-y-6">
+                        <div class="bg-white p-6 rounded-lg shadow">
+                           <p class="font-semibold text-lg text-[#2c3e50]">Key Certifications</p>
+                           <ul class="list-disc list-inside text-gray-700 mt-2 space-y-1">
+                               <li>Introduction to Programming Using Python – Microsoft</li>
+                               <li>Data Science & AI Master's Program – Learnbay (Ongoing)</li>
+                           </ul>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow">
+                           <p class="font-semibold text-lg text-[#2c3e50]">Languages</p>
+                           <ul class="list-disc list-inside text-gray-700 mt-2 space-y-1">
+                               <li>English (Fluent)</li>
+                               <li>Kannada (Mother Tongue)</li>
+                               <li>Hindi (Native)</li>
+                           </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Skills Chart
+            const ctx = document.getElementById('skillsChart').getContext('2d');
+            const skillsData = {
+                'Languages & Databases': ['Python', 'SQL'],
+                'Data Visualization': ['Power BI', 'Tableau', 'Excel'],
+                'Cloud & ETL': ['Azure Data Factory', 'Azure Synapse', 'SSIS', 'SSRS'],
+                'Core Concepts': ['Data Wrangling', 'Dashboarding', 'Automation']
+            };
+            
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(skillsData),
+                    datasets: [{
+                        label: 'Skills by Category',
+                        data: Object.values(skillsData).map(arr => arr.length * 20 + 20), // Arbitrary length for visual representation
+                        backgroundColor: '#3498db', /* Blue for bars */
+                        borderColor: '#2980b9',
+                        borderWidth: 1,
+                        borderRadius: 5,
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const category = context.label;
+                                    const skills = skillsData[category].join(', ');
+                                    return `${category}: ${skills}`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            grid: {
+                                display: false,
+                                drawBorder: false,
+                            },
+                            ticks: {
+                                display: false
+                            }
+                        },
+                        y: {
+                            grid: {
+                                display: false,
+                                drawBorder: false,
+                            },
+                            ticks: {
+                                font: {
+                                    size: 14,
+                                    weight: '500'
+                                },
+                                color: '#2c3e50'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Interactive Timeline
+            const timelineItems = document.querySelectorAll('.timeline-item');
+            timelineItems.forEach((item, index) => {
+                item.addEventListener('click', () => {
+                    // Close all other items
+                    timelineItems.forEach(otherItem => {
+                        if (otherItem !== item) {
+                            otherItem.classList.remove('active');
+                            otherItem.querySelector('.timeline-item-content').classList.remove('open');
+                        }
+                    });
+
+                    // Toggle clicked item
+                    item.classList.toggle('active');
+                    item.querySelector('.timeline-item-content').classList.toggle('open');
+                });
+                
+                // Auto-open the first item
+                if (index === 0) {
+                    item.click();
+                }
+            });
+            
+            // Active Nav Link on Scroll
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('.nav-link');
+
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (pageYOffset >= sectionTop - 100) { // Adjusted offset for fixed header
+                        current = section.getAttribute('id');
+                    }
+                });
+
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href').includes(current)) {
+                        link.classList.add('active');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
